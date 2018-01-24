@@ -1,31 +1,40 @@
 // require all of the node packages
 require("dotenv").config();
+const keys = require("./keys.js");
 const rq = require("request");
+const Twitter = require('twitter');
+const Spotify = require('node-spotify-api');
 
 // link the input to the node command line
 const command = process.argv[2];
 
-// link this file to the keys.js file
-const keys = require("./keys.js");
-
-//------------------------------------------ twitter requests
-// link to twitter node package
-const Twitter = require('twitter');
-
-var client = new Twitter({
-    consumer_key: process.env.TWITTER_CONSUMER_KEY,
-    consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
-    access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
-    access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-});
-
-// When entering `my-tweets`, return my 20 tweets
-
+// key commands for requests
 if (command === 'my-tweets') {
     getTweets();
 }
 
+if (command === 'spotify-this-song') {
+    spotifySong();
+}
+
+if (command === 'movie-this') {
+    movieInfo();
+}
+
+if (command === 'do-what-it-says') {
+    whatItSays();
+}
+
+//------------------------------------------ twitter requests
+
+
 function getTweets() {
+    var client = new Twitter({
+        consumer_key: process.env.TWITTER_CONSUMER_KEY,
+        consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+        access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
+        access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+    });
 
     var params = {
         screen_name: 'jennywar222'
@@ -44,17 +53,6 @@ function getTweets() {
 }
 
 // ------------------------------------------------ spotify requests
-// When entering `spotify-this-song`, return the song entered
-
-// if (command === 'spotify-this-song') {
-//     spotifySong();
-// }
-
-var Spotify = require('node-spotify-api');
-
-
-
-
 
 function spotifySong() {
 
@@ -62,8 +60,6 @@ function spotifySong() {
         id: process.env.SPOTIFY_ID,
         secret: process.env.SPOTIFY_SECRET
     });
-
-    // search: function({ type: 'artist OR album OR track', query: 'My search query', limit: 20 }, callback);
 
     spotify.search({ 
         type: 'track', 
@@ -82,7 +78,7 @@ function spotifySong() {
     });
 }
 
-spotifySong();
+
 
 
 // ------------------------------------------------- OMBD requests
