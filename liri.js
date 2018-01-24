@@ -64,6 +64,10 @@ function spotifySong() {
         secret: process.env.SPOTIFY_SECRET
     });
 
+    if (getSong === undefined) {
+        getSong = 'The Sign';
+    }
+    
     spotify.search ({ 
         type: 'track', 
         query: getSong }, function (err, data) {
