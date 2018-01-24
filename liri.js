@@ -27,7 +27,6 @@ if (command === 'do-what-it-says') {
 
 //------------------------------------------ twitter requests
 
-
 function getTweets() {
     var client = new Twitter({
         consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -56,14 +55,18 @@ function getTweets() {
 
 function spotifySong() {
 
+    let getSong = process.argv[3];
+    // if the song is more than one word, make a for loop so 
+    // quotations are not required for the song name 
+
     var spotify = new Spotify({
         id: process.env.SPOTIFY_ID,
         secret: process.env.SPOTIFY_SECRET
     });
 
-    spotify.search({ 
+    spotify.search ({ 
         type: 'track', 
-        query: 'All the Small Things' }, function (err, data) {
+        query: getSong }, function (err, data) {
         if (err) {
             return console.log('Error occurred: ' + err);
         }
@@ -77,9 +80,6 @@ function spotifySong() {
         console.log(data.tracks.items[0].album.name);
     });
 }
-
-
-
 
 // ------------------------------------------------- OMBD requests
 // When entering `movie-this`, return the movies information for:
