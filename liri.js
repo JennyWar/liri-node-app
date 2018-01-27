@@ -1,31 +1,40 @@
 // require all of the node packages
 require("dotenv").config();
+const keys = require("./keys.js");
 const rq = require("request");
+const Twitter = require('twitter');
+const Spotify = require('node-spotify-api');
+
 
 // link the input to the node command line
 const command = process.argv[2];
 
-// link this file to the keys.js file
-const keys = require("./keys.js");
-
-//------------------------------------------ twitter requests
-// link to twitter node package
-const Twitter = require('twitter');
-
-var client = new Twitter({
-    consumer_key: process.env.TWITTER_CONSUMER_KEY,
-    consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
-    access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
-    access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-});
-
-// When entering `my-tweets`, return my 20 tweets
-
+// key commands for requests
 if (command === 'my-tweets') {
     getTweets();
 }
 
+if (command === 'spotify-this-song') {
+    spotifySong();
+}
+
+if (command === 'movie-this') {
+    movieInfo();
+}
+
+if (command === 'do-what-it-says') {
+    whatItSays();
+}
+
+//------------------------------------------ twitter requests
+
 function getTweets() {
+    var client = new Twitter({
+        consumer_key: process.env.TWITTER_CONSUMER_KEY,
+        consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+        access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
+        access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+    });
 
     var params = {
         screen_name: 'jennywar222'
@@ -44,31 +53,36 @@ function getTweets() {
 }
 
 // ------------------------------------------------ spotify requests
-// When entering `spotify-this-song`, return the song entered
-
-if (command === 'spotify-this-song') {
-    spotifySong();
-}
-
-var Spotify = require('node-spotify-api');
-
-var spotify = new Spotify({
-    id: process.env.SPOTIFY_ID,
-    secret: process.env.SPOTIFY_SECRET
-});
-
-
 
 function spotifySong() {
 
-    // search: function({ type: 'artist OR album OR track', query: 'My search query', limit: 20 }, callback);
+    let getSong = process.argv[3];
+    // if the song is more than one word, make a for loop so 
+    // quotations are not required for the song name 
 
-    spotify.search({ type: 'track', query: 'All the Small Things' }, function (err, data) {
+    var spotify = new Spotify({
+        id: process.env.SPOTIFY_ID,
+        secret: process.env.SPOTIFY_SECRET
+    });
+
+    if (getSong === undefined) {
+        getSong = 'The Sign';
+    }
+    
+    spotify.search ({ 
+        type: 'track', 
+        query: getSong }, function (err, data) {
         if (err) {
             return console.log('Error occurred: ' + err);
         }
-
-        console.log(data);
+        //console log the artist of the song
+        console.log(data.tracks.items[0].album.artists[0].name);
+        // // console log the songs name
+        console.log(data.tracks.items[0].name);
+        // console log the preview link of the song from spotify
+        console.log(data.tracks.items[0].artists[0].href);
+        // console log the album name
+        console.log(data.tracks.items[0].album.name);
     });
 }
 
