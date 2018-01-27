@@ -87,7 +87,10 @@ function spotifySong() {
 }
 
 // ------------------------------------------------- OMBD requests
+
+// create a movieInfo() function that
 // When entering `movie-this`, return the movies information for:
+
 //  * Title of the movie.
 //    * Year the movie came out.
 //    * IMDB Rating of the movie.
@@ -97,6 +100,14 @@ function spotifySong() {
 //    * Plot of the movie.
 //    * Actors in the movie.
 
+// if no movie is specified have the search default to Mr.Nobody
+
 
 
 // ------------------------------------- do what it says requests;
+
+// download the fs node package for this request to work
+
+// if the do-what-it-says command is run
+// it should run the spotifySong() function and search for the 
+// song in the random.txt file and will search for "I Want it That Way"
